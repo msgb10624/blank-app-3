@@ -11,10 +11,9 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.subheader("📥 입력 값 설정")
-    # 물체의 질량 및 거리 입력 (st.number_input 활용, 기본값 및 최소값 설정)
-    a = st.number_input('물체 a의 질량 (kg)', min_value=0.0, value=1.0, step=1.0, format="%f")
-    b = st.number_input('물체 b의 질량 (kg)', min_value=0.0, value=1.0, step=1.0, format="%f")
-    r = st.number_input('물체 a와 물체 b의 거리 (m)', min_value=1e-10, value=1.0, step=0.1, format="%f")
+    a = st.number_input('물체 a의 질량 (kg)', min_value=0.0, value=1.0e24, step=1.0e22, format="%e")
+    b = st.number_input('물체 b의 질량 (kg)', min_value=0.0, value=1.0e24, step=1.0e22, format="%e")
+    r = st.number_input('물체 a와 물체 b의 거리 (m)', min_value=1e-10, value=1.0e8, step=1.0e6, format="%e")
 
 with col2:
     st.subheader("📊 계산 결과")
@@ -35,9 +34,26 @@ with col2:
         
         st.divider()
         
-        # 비교 결과 출력 (소수점 아래가 너무 길어질 수 있으므로 과학적 표기법 활용)
+        # 1. 태양-지구 중력과 비교 (요청하신 기능 추가)
         st.write(f"☀️ **태양-지구 사이 중력의** `{(g/sun_earth):.6e}` 배")
+        if g > sun_earth:
+            st.info("💡 계산된 중력이 **태양-지구 사이의 중력보다 큽니다!**")
+        elif g < sun_earth:
+            st.warning("📉 계산된 중력이 **태양-지구 사이의 중력보다 작습니다.**")
+        else:
+            st.success("⚖️ 계산된 중력이 **태양-지구 사이의 중력과 같습니다.**")
+            
+        st.divider()
+        
+        # 2. 달-지구 중력과 비교 (보너스로 달-지구 비교도 동일하게 적용!)
         st.write(f"🌕 **달-지구 사이 중력의** `{(g/moon_earth):.6e}` 배")
+        if g > moon_earth:
+            st.info("💡 계산된 중력이 **달-지구 사이의 중력보다 큽니다!**")
+        elif g < moon_earth:
+            st.warning("📉 계산된 중력이 **달-지구 사이의 중력보다 작습니다.**")
+        else:
+            st.success("⚖️ 계산된 중력이 **달-지구 사이의 중력과 같습니다.**")
+            
     else:
         st.error("거리는 0보다 커야 합니다.")
 
